@@ -5,6 +5,7 @@ class MyTurtle:
 
     def __init__(self):
         self.trt = Turtle()
+        self.trt.hideturtle() #hide any MyTurtle
 
     def drawLine(self, x1, y1, x2, y2):
         self.trt.penup()
@@ -27,6 +28,21 @@ class Tile:
         mineTurtle.penup()
         mineTurtle.goto(self.x+self.boxSize/2, self.y-self.boxSize/2)
         mineTurtle.shape(imageMine)
+
+    #fill tile with a color
+    def fillTile(self, color):
+    	fillerTurtle = Turtle()
+    	fillerTurtle.penup()
+    	fillerTurtle.goto(self.x+1, self.y-1)
+
+    	fillerTurtle.color(color)
+    	fillerTurtle.begin_fill()
+    	for i in range(3):
+    		fillerTurtle.forward(self.boxSize)
+    		fillerTurtle.right(90)
+    	fillerTurtle.forward(self.boxSize)
+    	fillerTurtle.end_fill()
+    	fillerTurtle.hideturtle()
     
     def setSetting(self, newSetting):
         self.setting = newSetting
@@ -122,7 +138,7 @@ screen.addshape(imageFlag)
 screen.addshape(imageMine)
 
 myMap = TileMap(numberOfBoxes, boxSize, numberOfMines)
-
+myMap.getTile(1,1).fillTile("white")	#temporart code, showing capability of filling a tile with color
 myMap.showMines()
 
 screen.update() #for making trutle instant
