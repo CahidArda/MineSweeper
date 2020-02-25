@@ -13,6 +13,7 @@ class MyTurtle:
         self.trt.pendown()
         self.trt.goto(x2,y2)
         self.trt.penup()
+        
 
 class Tile:
 
@@ -35,6 +36,7 @@ class Tile:
         self.mineTurtle.write("X", False, "center")
 
     def drawNumber(self):
+        self.fillTile("white")
         self.mineTurtle.write(self.number, False, "center")
         
     #fill tile with a color
@@ -179,7 +181,12 @@ class TileMap:
         coordinatesToTry = [[xIndex-1, yIndex], [xIndex+1, yIndex], [xIndex, yIndex-1], [xIndex, yIndex+1]]
 
         for i in coordinatesToTry:
-            if self.withinLimits(i[0], i[1]):
+            if self.withinLimits(i[0], i[1]):   #check surroundings of the tile
+
+                if self.getTile(i[0], i[1]).getSetting()=="number": #if the neighbouring tile is "number", make it visible and add it to checked tiles
+                    self.getTile(i[0], i[1]).drawNumber()
+                    self.checkedTiles.append([i[0], i[1]])
+
                 if (self.canBeChecked(i)):
                     self.showIsland(i[0], i[1])
 
@@ -206,6 +213,8 @@ class TileMap:
             tile.drawNumber()       #clicked on an empty spot, show island
         else: #
             self.showIsland(xIndex, yIndex)
+
+
             
 
 #settings
@@ -231,8 +240,6 @@ screen.tracer(0,0) #for making turtle instant
 
 myMap = TileMap(numberOfBoxes, boxSize, numberOfMines)
 screen.onclick(myMap.click) #set action for clicking
-#myMap.showMines()
-#myMap.getTile(2,2).drawNumber()
 
 screen.update() #for making turtle instant
 screen.mainloop()
