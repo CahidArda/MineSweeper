@@ -33,7 +33,8 @@ class Tile:
 
     def drawMine(self):
         #self.mineTurtle.showturtle()   #didn't work, don't know why
-        self.mineTurtle.write("X", False, "center")
+        #self.mineTurtle.write("X", False, "center")
+        self.mineTurtle.shape(imageMine)
 
     def drawNumber(self):
         self.fillTile("white")
@@ -56,9 +57,6 @@ class Tile:
     
     def setSetting(self, newSetting):
         self.setting = newSetting
-
-        if (newSetting=="mine"):
-            self.mineTurtle.shape(imageMine)
 
     def getSetting(self):
         return self.setting
@@ -230,10 +228,7 @@ screen.setup(screenWidth, screenHeight)
 screen.setworldcoordinates(0,-screenHeight, screenWidth, 0)
 screen.bgcolor("gray")
 
-#store shapes
 imageMine = "res/Mine.gif"
-imageFlag = "res/Flag.gif"
-screen.addshape(imageFlag)
 screen.addshape(imageMine)
 
 screen.tracer(0,0) #for making turtle instant
