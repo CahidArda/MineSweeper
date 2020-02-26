@@ -27,6 +27,7 @@ class Tile:
         self.indx = indx                                            #store index values of the tile
         self.tileSize = tileSize                                    #store universal tile size
         self.number = 0                                             #number is: -1 when tile is a mine, 0 when it is empty, is a positive value when it is a number
+        self.isRevealed = False
 
         #a turtle to go to the middle of the tile as the tile is initiated, will be used to display values on the tile
         self.trt = Turtle()         
@@ -51,15 +52,21 @@ class Tile:
 
     #displays the content of the tile when called
     def showTileContent(self):
+        self.isRevealed = True
+
         if (self.number==-1):   #if tile is a mine
             self.trt.color("red")
             self.trt.write("X", False, "center", font=('bold'))
         elif (self.number==0):  #if tile is empty
             self.fillTile("white")
-        elif (self.number==-2):
+        elif (self.number==-2): #for majorTile of the game board, case of failiure
             self.trt.color("red")
-            self.trt.write("You Are Die", False, "center", font=("Arial", 20, 'bold'))
+            self.trt.write("YOU ARE DIE", False, "center", font=("Arial", 20, 'bold'))  #don't take the "you are die" message too seriously, it was a joke.
+        elif (self.number==-3): #for majorTile of the game board, case of succes
+            self.trt.color("red")
+            self.trt.write("You Just Won", False, "center", font=("Arial", 20, 'bold'))
         else:
+            self.fillTile("white")
             self.trt.write(self.number, False, "center")
 
 
@@ -87,12 +94,9 @@ class GameBoard:
         #fill 'tiles' with Tile objects and 'checkedTiles' with False
         for y in range(numberOfTiles[1]):
             subTiles = []
-            subCheckedTiles = []
             for x in range(numberOfTiles[0]):
                 subTiles.append(Tile([x,y], self.tileSize))
-                subCheckedTiles.append(False)
             self.tiles.append(subTiles)
-            self.checkedTiles.append(subCheckedTiles)
 
         self.drawGameBoard()                   
         self.fillGameBoardWithMines() 
@@ -193,8 +197,8 @@ class GameBoard:
     def endGame(self, xCor, yCor):
         trt = Turtle()
         trt.penup()
-        trt.goto(xCor, -yCor)
-        trt.write("You Are Die", False, "center", font=("Arial", 20, 'bold'))
+        trt.goto(xCor, yCor)
+        trt.write("Go Away", False, "center", font=("Arial", 10, 'bold'))
 
     #defines the actions after a mouse click
     def click(self, xCor, yCor):
@@ -215,9 +219,26 @@ class GameBoard:
             self.showIsland(tile.indx)
         else:                   #clicked tile is a number
             tile.showTileContent()
+            self.checkedTiles.append(tile.indx)
+
+        #after you are done with operations, check if there is any spots left to click (or the player has one)
+        totalRevealed = 0
+        for row in self.tiles:
+            for tile in row:
+                if (tile.isRevealed):
+                    totalRevealed = 1 + totalRevealed
+
+        if (self.numberOfTiles[0]*self.numberOfTiles[1]-self.numberOfMines == totalRevealed):
+            print("I was here")
+            self.majorTile.number = -3
+            self.majorTile.showTileContent()
+            self.screen.onclick(self.endGame)
+
+
+        
 
 #settings
-numberOfTiles = [20, 20]
+numberOfTiles = [20, 15]
 numberOfMines = 40
 tileSize = 32
 
