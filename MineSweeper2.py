@@ -61,7 +61,7 @@ class Tile:
             self.fillTile("white")
         elif (self.number==-2): #for majorTile of the game board, case of failiure
             self.trt.color("red")
-            self.trt.write("YOU ARE DIE", False, "center", font=("Arial", 20, 'bold'))  #don't take the "you are die" message too seriously, it was a joke.
+            self.trt.write("GAME OVER", False, "center", font=("Arial", 20, 'bold'))    #This line originaly displayed "you are die" just for fun, I removed it later.
         elif (self.number==-3): #for majorTile of the game board, case of succes
             self.trt.color("red")
             self.trt.write("You Just Won", False, "center", font=("Arial", 20, 'bold'))
@@ -213,7 +213,7 @@ class GameBoard:
         if (tileNumber==-1):    #clicked tile has a mine
             print("show mines")
             self.showMines()
-            self.majorTile.showTileContent()    #display "you are die"
+            self.majorTile.showTileContent()    #display "GAME OVER"
             self.screen.onclick(self.endGame)
         elif (tileNumber==0):   #clicked tile is empty
             self.showIsland(tile.indx)
